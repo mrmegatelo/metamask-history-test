@@ -17,7 +17,7 @@ function App() {
       }
 
       // setTimeout(triggerHistoryReplaceState, 10) // It doesn't trigger page reload
-      setTimeout(triggerHistoryReplaceState, 100) // It triggers pade reload
+      setTimeout(triggerHistoryReplaceState, 50) // It triggers pade reload
       // setTimeout(triggerHistoryReplaceState, 150) // It doesn't trigger page reload
   }, [])
 
