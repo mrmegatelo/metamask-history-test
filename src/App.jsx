@@ -1,10 +1,14 @@
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
+
+const MAX_TIMES_TRIGGERED = 20
 
 function App() {
     const [message, setMessage] = useState(window.history.state?.message)
+    let timer = useRef(null)
+    let timesTriggered = useRef(0);
 
   useEffect(() => {
       const triggerHistoryReplaceState = () => {
@@ -12,13 +16,16 @@ function App() {
           url.searchParams.set('test', '123')
           url.hash = '#message'
           const hash = '#_rp_cai=a8c83fda-ce7504249-931b-31667bef436a'
-          window.history.replaceState({ message: 'The state has been replaced' }, '', hash)
+          timesTriggered.current++;
+          const maxTriggeredTimesReached = timesTriggered.current === MAX_TIMES_TRIGGERED
+          window.history.replaceState({ message: maxTriggeredTimesReached ? 'Pending...' : 'Finished!' }, '', hash)
           setMessage(window.history.state?.message)
+          if (maxTriggeredTimesReached) {
+              clearInterval(timer.current)
+          }
       }
 
-      // setTimeout(triggerHistoryReplaceState, 10) // It doesn't trigger page reload
-      setTimeout(triggerHistoryReplaceState, 50) // It triggers pade reload
-      // setTimeout(triggerHistoryReplaceState, 150) // It doesn't trigger page reload
+      timer.current = setInterval(triggerHistoryReplaceState, 10) // At some point it triggers pade reload
   }, [])
 
   return (
