@@ -3,7 +3,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import {useEffect, useRef, useState} from "react";
 
-const MAX_TIMES_TRIGGERED = 20
+const MAX_TIMES_TRIGGERED = 30
 
 function App() {
     const [message, setMessage] = useState(window.history.state?.message)
@@ -18,14 +18,20 @@ function App() {
           const hash = '#_rp_cai=a8c83fda-ce7504249-931b-31667bef436a'
           timesTriggered.current++;
           const maxTriggeredTimesReached = timesTriggered.current === MAX_TIMES_TRIGGERED
-          window.history.replaceState({ message: maxTriggeredTimesReached ? 'Pending...' : 'Finished!' }, '', hash)
-          setMessage(window.history.state?.message)
+          console.log({ timesTriggered: timesTriggered.current, MAX_TIMES_TRIGGERED, maxTriggeredTimesReached })
+          const message = maxTriggeredTimesReached ? 'Finished!' : 'Pending...'
+          window.history.replaceState({ message }, '', hash)
+          setMessage(message)
           if (maxTriggeredTimesReached) {
               clearInterval(timer.current)
           }
       }
 
-      timer.current = setInterval(triggerHistoryReplaceState, 10) // At some point it triggers pade reload
+      timer.current = setInterval(triggerHistoryReplaceState, 20) // At some point it triggers pade reload
+
+      return () => {
+          clearInterval(timer.current)
+      }
   }, [])
 
   return (
