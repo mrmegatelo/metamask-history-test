@@ -16,7 +16,9 @@ function App() {
           setMessage(window.history.state?.message)
       }
 
-      setTimeout(triggerHistoryReplaceState, 90)
+      // setTimeout(triggerHistoryReplaceState, 10) // It doesn't trigger page reload
+      setTimeout(triggerHistoryReplaceState, 100) // It triggers pade reload
+      // setTimeout(triggerHistoryReplaceState, 150) // It doesn't trigger page reload
   }, [])
 
   return (
